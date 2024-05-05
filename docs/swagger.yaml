@@ -291,7 +291,7 @@ host: 52.15.128.117:8080
 info:
   contact: {}
   description: This is a server for app.
-  title: Fanify Hub
+  title: Fidz
   version: "1.0"
 paths:
   /api/all-company:
@@ -324,7 +324,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: Create a new user in db
+      description: Get All contracts
       parameters:
       - default: Bearer <token>
         description: Token de autenticação (Colocar o token deixando o Bearer)
@@ -343,7 +343,7 @@ paths:
           description: Unable to store data in database
           schema:
             $ref: '#/definitions/erros.InternalServerError'
-      summary: Create user
+      summary: Get All contracts
       tags:
       - Contract
   /api/all-items:

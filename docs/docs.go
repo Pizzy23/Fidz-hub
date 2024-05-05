@@ -56,7 +56,7 @@ const docTemplate = `{
         },
         "/api/all-contract": {
             "get": {
-                "description": "Create a new user in db",
+                "description": "Get All contracts",
                 "consumes": [
                     "application/json"
                 ],
@@ -66,7 +66,7 @@ const docTemplate = `{
                 "tags": [
                     "Contract"
                 ],
-                "summary": "Create user",
+                "summary": "Get All contracts",
                 "parameters": [
                     {
                         "type": "string",
@@ -1472,7 +1472,7 @@ var SwaggerInfo = &swag.Spec{
 	Host:             "52.15.128.117:8080",
 	BasePath:         "",
 	Schemes:          []string{},
-	Title:            "Fanify Hub",
+	Title:            "Fidz",
 	Description:      "This is a server for app.",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,

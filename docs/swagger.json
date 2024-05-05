@@ -2,7 +2,7 @@
     "swagger": "2.0",
     "info": {
         "description": "This is a server for app.",
-        "title": "Fanify Hub",
+        "title": "Fidz",
         "contact": {},
         "version": "1.0"
     },
@@ -49,7 +49,7 @@
         },
         "/api/all-contract": {
             "get": {
-                "description": "Create a new user in db",
+                "description": "Get All contracts",
                 "consumes": [
                     "application/json"
                 ],
@@ -59,7 +59,7 @@
                 "tags": [
                     "Contract"
                 ],
-                "summary": "Create user",
+                "summary": "Get All contracts",
                 "parameters": [
                     {
                         "type": "string",
