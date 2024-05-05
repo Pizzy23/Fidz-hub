@@ -432,7 +432,7 @@
         },
         "/api/make-trade": {
             "post": {
-                "description": "Create a transfer from a user to a new token",
+                "description": "This would be implemented as the application remains open. RoadMap is mocked, and this randomly generates a number, and gives an FDZ that can be 0.000001 or 1",
                 "consumes": [
                     "application/json"
                 ],
@@ -442,15 +442,15 @@
                 "tags": [
                     "Token"
                 ],
-                "summary": "Make a Trade",
+                "summary": "Gain token",
                 "parameters": [
                     {
-                        "description": "Data for make a new user",
+                        "description": "Data for gain tokens :)",
                         "name": "request",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/inter.Trade"
+                            "$ref": "#/definitions/inter.Gimmetoken"
                         }
                     },
                     {
@@ -464,9 +464,9 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "New User Created successfully",
+                        "description": "Your tokens is be send for your account",
                         "schema": {
-                            "$ref": "#/definitions/inter.UserOutputController"
+                            "$ref": "#/definitions/inter.TransactionRes"
                         }
                     },
                     "500": {
@@ -763,9 +763,29 @@
                 }
             }
         },
+        "inter.Gimmetoken": {
+            "type": "object",
+            "properties": {
+                "contractID": {
+                    "type": "string"
+                },
+                "quantity": {
+                    "type": "integer"
+                },
+                "uriNumber": {
+                    "type": "integer"
+                },
+                "walletID": {
+                    "type": "string"
+                }
+            }
+        },
         "inter.TokenCreateInput": {
             "type": "object",
             "properties": {
+                "contractId": {
+                    "type": "string"
+                },
                 "description": {
                     "type": "string"
                 },
@@ -850,10 +870,56 @@
                 "from": {
                     "type": "string"
                 },
+                "quantity": {
+                    "type": "integer"
+                },
                 "to": {
                     "type": "string"
+                }
+            }
+        },
+        "inter.TransactionRes": {
+            "type": "object",
+            "properties": {
+                "completedAt": {
+                    "type": "string"
                 },
-                "tokenId": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "request": {
+                    "type": "object",
+                    "properties": {
+                        "contractId": {
+                            "type": "string"
+                        },
+                        "quantity": {
+                            "type": "integer"
+                        }
+                    }
+                },
+                "result": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "string"
+                    }
+                },
+                "status": {
+                    "type": "string"
+                },
+                "transactionHash": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "walletId": {
                     "type": "string"
                 }
             }

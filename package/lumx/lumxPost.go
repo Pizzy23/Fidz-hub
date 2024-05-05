@@ -117,7 +117,7 @@ func CreateContractLumx(contract inter.ContractController) (*lInterface.WalletRe
 }
 
 // Feito
-func CreateTransfer(transferDetails lInterface.TransferDetails) (*lInterface.TransferResponse, error) {
+func CreateTransfer(transferDetails lInterface.TransferDetails) (*lInterface.TransactionResponse, error) {
 	url := "https://protocol-sandbox.lumx.io/v2/transactions/transfers"
 	token := os.Getenv("API_TOKEN")
 	if token == "" {
@@ -149,13 +149,13 @@ func CreateTransfer(transferDetails lInterface.TransferDetails) (*lInterface.Tra
 	}
 
 	switch res.StatusCode {
-	case http.StatusOK: // Assuming 200 is the success code for this API
-		var resp lInterface.TransferResponse
+	case http.StatusOK:
+		var resp lInterface.TransactionResponse
 		if err := json.Unmarshal(body, &resp); err != nil {
 			return nil, fmt.Errorf("error unmarshalling response: %v", err)
 		}
 		return &resp, nil
-	case http.StatusInternalServerError: // 500
+	case http.StatusInternalServerError:
 		var errResp lInterface.ErrorResponse
 		if err := json.Unmarshal(body, &errResp); err != nil {
 			return nil, fmt.Errorf("error unmarshalling error response: %v", err)

@@ -4,6 +4,7 @@ import (
 	inter "fanify/internal/tokens/interface"
 	"fanify/package/lumx"
 	lInterface "fanify/package/lumx/interface"
+	"fmt"
 	"math/rand"
 	"net/http"
 	"strconv"
@@ -36,13 +37,14 @@ func MakeTransfer(c *gin.Context, input inter.Transaction) {
 		To:         input.To,
 		Quantity:   input.Quantity,
 	}
-	_, err := lumx.CreateTransfer(newInput)
+	res, err := lumx.CreateTransfer(newInput)
 	if err != nil {
 		c.Set("Error", "Error in lumx Api")
 		c.Status(http.StatusNotAcceptable)
 		return
 	}
-	c.Set("Response", "Transfer is by made. It may take a few minutes if you have a lot of orders, but it will be delivered on time :)")
+	response := fmt.Sprintf("Transfer is by made. It may take a few minutes if you have a lot of orders, but it will be delivered on time :)\nNumber order: %s", res.TransactionHash)
+	c.Set("Response", response)
 	c.Status(http.StatusOK)
 }
 
@@ -53,7 +55,7 @@ func MakeTrade(c *gin.Context, input inter.Trade) {
 		To:         input.Transaction1.To,
 		Quantity:   input.Transaction1.Quantity,
 	}
-	_, err := lumx.CreateTransfer(newInput)
+	r1, err := lumx.CreateTransfer(newInput)
 	if err != nil {
 		c.Set("Error", "Error in lumx Api")
 		c.Status(http.StatusNotAcceptable)
@@ -65,13 +67,14 @@ func MakeTrade(c *gin.Context, input inter.Trade) {
 		To:         input.Transaction2.To,
 		Quantity:   input.Transaction2.Quantity,
 	}
-	_, err = lumx.CreateTransfer(newInput)
+	r2, err := lumx.CreateTransfer(newInput)
 	if err != nil {
 		c.Set("Error", "Error in lumx Api")
 		c.Status(http.StatusNotAcceptable)
 		return
 	}
-	c.Set("Response", "Transfer is by made. It may take a few minutes if you have a lot of orders, but it will be delivered on time :)")
+	response := fmt.Sprintf("Transfer is by made. It may take a few minutes if you have a lot of orders, but it will be delivered on time :)\nNumber orders: %s\n %s", r1.TransactionHash, r2.TransactionHash)
+	c.Set("Response", response)
 	c.Status(http.StatusOK)
 }
 

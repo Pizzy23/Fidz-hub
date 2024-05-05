@@ -82,8 +82,21 @@ definitions:
       contractId:
         type: string
     type: object
+  inter.Gimmetoken:
+    properties:
+      contractID:
+        type: string
+      quantity:
+        type: integer
+      uriNumber:
+        type: integer
+      walletID:
+        type: string
+    type: object
   inter.TokenCreateInput:
     properties:
+      contractId:
+        type: string
       description:
         type: string
       imageUrl:
@@ -139,9 +152,39 @@ definitions:
         type: string
       from:
         type: string
+      quantity:
+        type: integer
       to:
         type: string
-      tokenId:
+    type: object
+  inter.TransactionRes:
+    properties:
+      completedAt:
+        type: string
+      createdAt:
+        type: string
+      id:
+        type: string
+      request:
+        properties:
+          contractId:
+            type: string
+          quantity:
+            type: integer
+        type: object
+      result:
+        additionalProperties:
+          type: string
+        type: object
+      status:
+        type: string
+      transactionHash:
+        type: string
+      type:
+        type: string
+      updatedAt:
+        type: string
+      walletId:
         type: string
     type: object
   inter.TransferOutput:
@@ -493,14 +536,16 @@ paths:
     post:
       consumes:
       - application/json
-      description: Create a transfer from a user to a new token
+      description: This would be implemented as the application remains open. RoadMap
+        is mocked, and this randomly generates a number, and gives an FDZ that can
+        be 0.000001 or 1
       parameters:
-      - description: Data for make a new user
+      - description: Data for gain tokens :)
         in: body
         name: request
         required: true
         schema:
-          $ref: '#/definitions/inter.Trade'
+          $ref: '#/definitions/inter.Gimmetoken'
       - default: Bearer <token>
         description: Token de autenticação (Colocar o token deixando o Bearer)
         in: header
@@ -511,14 +556,14 @@ paths:
       - application/json
       responses:
         "200":
-          description: New User Created successfully
+          description: Your tokens is be send for your account
           schema:
-            $ref: '#/definitions/inter.UserOutputController'
+            $ref: '#/definitions/inter.TransactionRes'
         "500":
           description: Unable to store data in database
           schema:
             $ref: '#/definitions/erros.InternalServerError'
-      summary: Make a Trade
+      summary: Gain token
       tags:
       - Token
   /api/make-transfer:
