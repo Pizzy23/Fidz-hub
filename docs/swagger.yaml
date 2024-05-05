@@ -287,7 +287,7 @@ definitions:
 externalDocs:
   description: OpenAPI
   url: https://swagger.io/resources/open-api/
-host: localhost:8080
+host: 52.15.128.117:8080
 info:
   contact: {}
   description: This is a server for app.
