@@ -39,7 +39,7 @@ func PullAllContract(c *gin.Context) {
 
 func PullUser(c *gin.Context, email string) {
 	validEmail := util.IsValidEmail(email)
-	if validEmail {
+	if !validEmail {
 		c.Set("Error", "E-mail is invalid")
 		c.Status(http.StatusBadRequest)
 		return
@@ -99,14 +99,19 @@ func CreateUser(c *gin.Context, user inter.UserController) {
 }
 
 func CreateContract(c *gin.Context, input inter.ContractController) {
-	res, err := lumx.CreateContractLumx(input)
-	if err != nil {
-		c.Set("Error", err)
-		c.Status(http.StatusNotAcceptable)
+	if len(input.Symbol) >= 3 {
+		res, err := lumx.CreateContractLumx(input)
+		if err != nil {
+			c.Set("Error", err)
+			c.Status(http.StatusNotAcceptable)
+			return
+		}
+		c.Set("Response", res)
+		c.Status(http.StatusOK)
 		return
 	}
-	c.Set("Response", res)
-	c.Status(http.StatusOK)
+	c.Set("Error", "Symbols need 3 to 5")
+	c.Status(http.StatusNotAcceptable)
 }
 
 func DeployContract(c *gin.Context, input inter.DeployController) {

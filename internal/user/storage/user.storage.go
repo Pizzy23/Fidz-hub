@@ -28,12 +28,12 @@ func CreateUser(q *gorm.DB, input inter.UserControllerInputDb) (*db.User, error)
 		Wallet:    input.Wallet,
 		WalletId:  input.WalletId,
 		ProjectId: input.ProjectId,
+		LoginID:   input.LoginId,
 		CreateAt:  time.Now(),
 	}
 	if err := q.Create(&newUser).Error; err != nil {
 		return nil, err
 	}
-
 	return &newUser, nil
 }
 

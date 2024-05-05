@@ -60,7 +60,7 @@ func PostLumxWallet() (*lInterface.WalletResponse, error) {
 }
 
 // Feito
-func CreateContractLumx(contract inter.ContractController) (*lInterface.WalletResponse, error) {
+func CreateContractLumx(contract inter.ContractController) (*lInterface.GetContract, error) {
 	newContract := lInterface.Contract{
 		Name:        contract.Name,
 		Symbol:      contract.Symbol,
@@ -100,7 +100,7 @@ func CreateContractLumx(contract inter.ContractController) (*lInterface.WalletRe
 
 	switch res.StatusCode {
 	case http.StatusCreated: // 201
-		var resp lInterface.WalletResponse
+		var resp lInterface.GetContract
 		if err := json.Unmarshal(body, &resp); err != nil {
 			return nil, fmt.Errorf("error unmarshalling response: %v", err)
 		}

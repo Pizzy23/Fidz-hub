@@ -6,7 +6,7 @@
         "contact": {},
         "version": "1.0"
     },
-    "host": "52.15.128.117:8080",
+    "host": "localhost:8080",
     "paths": {
         "/api/all-company": {
             "get": {
