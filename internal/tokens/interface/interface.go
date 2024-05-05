@@ -1,5 +1,7 @@
 package inter
 
+import "time"
+
 type TokenCreateInput struct {
 	Traits      *map[string]string `json:"traits,omitempty"`
 	Name        string             `json:"name"`
@@ -92,4 +94,12 @@ type TransactionRes struct {
 	CreatedAt   string `json:"createdAt"`
 	UpdatedAt   string `json:"updatedAt"`
 	CompletedAt string `json:"completedAt"`
+}
+
+type PriceInfo struct {
+	Price        string
+	PriceConvert string
+	Token        string
+	TokenConvert string
+	Date         time.Time
 }

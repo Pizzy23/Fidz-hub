@@ -47,5 +47,7 @@ func SetupRouter() *gin.Engine {
 	auth.GET("/get-token", tokens.GetToken)
 	auth.GET("/all-token", tokens.GetAllToken)
 
+	auth.GET("/converter")
+
 	return r
 }

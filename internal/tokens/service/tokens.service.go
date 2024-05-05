@@ -8,6 +8,7 @@ import (
 	"math/rand"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -119,6 +120,27 @@ func GetAllToken(c *gin.Context, ContractId string) {
 		c.Set("Error", "Error in lumx Api")
 		c.Status(http.StatusNotAcceptable)
 		return
+	}
+	c.Set("Response", res)
+	c.Status(http.StatusOK)
+}
+
+func ConvertToken(c *gin.Context, Token string) {
+	currentNow := 10
+	num, err := strconv.Atoi(Token)
+	if err != nil {
+		c.Set("Error", err)
+		c.Status(http.StatusInternalServerError)
+		return
+	}
+	converter := num
+
+	res := inter.PriceInfo{
+		Price:        strconv.Itoa(currentNow),
+		PriceConvert: strconv.Itoa(converter),
+		Token:        Token,
+		TokenConvert: strconv.Itoa(converter),
+		Date:         time.Now().UTC(),
 	}
 	c.Set("Response", res)
 	c.Status(http.StatusOK)
