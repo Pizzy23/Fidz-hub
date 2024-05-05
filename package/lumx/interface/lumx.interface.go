@@ -102,13 +102,20 @@ type MintRequest struct {
 	URINumber  int    `json:"uriNumber"`
 }
 
+type reqs struct {
+	ContractID string `json:"contractId"`
+	Quantity   int    `json:"quantity"`
+	From       string `json:"from"`
+	To         string `json:"to"`
+}
+
 type TransactionResponse struct {
 	ID              string                 `json:"id"`
 	WalletID        string                 `json:"walletId"`
 	Status          string                 `json:"status"`
 	TransactionHash string                 `json:"transactionHash"`
 	Result          map[string]interface{} `json:"result"`
-	Request         MintRequest            `json:"request"`
+	Request         reqs                   `json:"request"`
 	Type            string                 `json:"type"`
 	CreatedAt       string                 `json:"createdAt"`
 	UpdatedAt       string                 `json:"updatedAt"`
