@@ -2,6 +2,7 @@ package middleware
 
 import (
 	_ "fanify/docs"
+	mkt "fanify/internal/mkt/handler"
 	tokens "fanify/internal/tokens/handler"
 	user "fanify/internal/user/handler"
 
@@ -50,5 +51,12 @@ func SetupRouter() *gin.Engine {
 	auth.GET("/converter", tokens.ConverterTokens)
 	auth.GET("/gain-tokens", tokens.GainToken)
 
+	auth.POST("/create-item", mkt.CreateItem)
+	auth.POST("/create-company", mkt.CreateCompany)
+	auth.GET("/all-item", mkt.GetAllItems)
+	auth.GET("/one-item", mkt.GetOneItems)
+	auth.GET("/one-company", mkt.GetOneCompany)
+	auth.GET("/company", mkt.GetOneCompany)
+	auth.GET("/all-company", mkt.GetAllCompany)
 	return r
 }

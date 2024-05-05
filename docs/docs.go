@@ -15,6 +15,45 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/api/all-company": {
+            "get": {
+                "description": "Get all company register in db",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Mkt"
+                ],
+                "summary": "Get all company",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "default": "Bearer \u003ctoken\u003e",
+                        "description": "Token de autenticação (Colocar o token deixando o Bearer)",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "One item for a company",
+                        "schema": {
+                            "$ref": "#/definitions/inter.MktItemOutput"
+                        }
+                    },
+                    "500": {
+                        "description": "Unable to make deploy",
+                        "schema": {
+                            "$ref": "#/definitions/erros.InternalServerError"
+                        }
+                    }
+                }
+            }
+        },
         "/api/all-contract": {
             "get": {
                 "description": "Create a new user in db",
@@ -47,6 +86,52 @@ const docTemplate = `{
                     },
                     "500": {
                         "description": "Unable to store data in database",
+                        "schema": {
+                            "$ref": "#/definitions/erros.InternalServerError"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/all-items": {
+            "get": {
+                "description": "Get all items for one company",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Mkt"
+                ],
+                "summary": "Get All Items",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Company name",
+                        "name": "Company",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "default": "Bearer \u003ctoken\u003e",
+                        "description": "Token de autenticação (Colocar o token deixando o Bearer)",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "All items for one company",
+                        "schema": {
+                            "$ref": "#/definitions/inter.MktItemsOutput"
+                        }
+                    },
+                    "500": {
+                        "description": "Unable to make deploy",
                         "schema": {
                             "$ref": "#/definitions/erros.InternalServerError"
                         }
@@ -185,6 +270,54 @@ const docTemplate = `{
                     },
                     "500": {
                         "description": "Unable to store data in database",
+                        "schema": {
+                            "$ref": "#/definitions/erros.InternalServerError"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/create-company": {
+            "post": {
+                "description": "Create a new Company",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Mkt"
+                ],
+                "summary": "Create Company",
+                "parameters": [
+                    {
+                        "description": "Data for make a new Company",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/inter.CreateCompanyController"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "default": "Bearer \u003ctoken\u003e",
+                        "description": "Token de autenticação (Colocar o token deixando o Bearer)",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "New Company Created successfully",
+                        "schema": {
+                            "$ref": "#/definitions/inter.UserOutputController"
+                        }
+                    },
+                    "500": {
+                        "description": "Error for make a new Company",
                         "schema": {
                             "$ref": "#/definitions/erros.InternalServerError"
                         }
@@ -579,6 +712,105 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/one-company": {
+            "get": {
+                "description": "Deploy new contract in the blockchain",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Mkt"
+                ],
+                "summary": "Get one company",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Company name",
+                        "name": "Company",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "default": "Bearer \u003ctoken\u003e",
+                        "description": "Token de autenticação (Colocar o token deixando o Bearer)",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "One item for a company",
+                        "schema": {
+                            "$ref": "#/definitions/inter.MktItemOutput"
+                        }
+                    },
+                    "500": {
+                        "description": "Unable to make deploy",
+                        "schema": {
+                            "$ref": "#/definitions/erros.InternalServerError"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/one-item": {
+            "get": {
+                "description": "Deploy new contract in the blockchain",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Mkt"
+                ],
+                "summary": "Get one item",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Company name",
+                        "name": "Company",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Item name",
+                        "name": "ItemName",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "default": "Bearer \u003ctoken\u003e",
+                        "description": "Token de autenticação (Colocar o token deixando o Bearer)",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "One item for a company",
+                        "schema": {
+                            "$ref": "#/definitions/inter.MktItemOutput"
+                        }
+                    },
+                    "500": {
+                        "description": "Unable to make deploy",
+                        "schema": {
+                            "$ref": "#/definitions/erros.InternalServerError"
+                        }
+                    }
+                }
+            }
+        },
         "/api/user": {
             "get": {
                 "description": "pull user and wallet for db",
@@ -614,6 +846,54 @@ const docTemplate = `{
                         "description": "New User Created successfully",
                         "schema": {
                             "$ref": "#/definitions/inter.UserOutputController"
+                        }
+                    },
+                    "500": {
+                        "description": "Unable to store data in database",
+                        "schema": {
+                            "$ref": "#/definitions/erros.InternalServerError"
+                        }
+                    }
+                }
+            }
+        },
+        "/create-item": {
+            "post": {
+                "description": "Create a new item in db",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Mkt"
+                ],
+                "summary": "Create item",
+                "parameters": [
+                    {
+                        "description": "Data for make a new item",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/inter.CreateItemController"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "default": "Bearer \u003ctoken\u003e",
+                        "description": "Token de autenticação (Colocar o token deixando o Bearer)",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "New item Created successfully",
+                        "schema": {
+                            "$ref": "#/definitions/inter.MktItemsOutput"
                         }
                     },
                     "500": {
@@ -856,6 +1136,43 @@ const docTemplate = `{
                 }
             }
         },
+        "inter.CreateCompanyController": {
+            "type": "object",
+            "properties": {
+                "URI": {
+                    "type": "integer"
+                },
+                "cnpj": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "urlImage": {
+                    "type": "string"
+                }
+            }
+        },
+        "inter.CreateItemController": {
+            "type": "object",
+            "properties": {
+                "URI": {
+                    "type": "integer"
+                },
+                "company": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "number"
+                },
+                "urlImage": {
+                    "type": "string"
+                }
+            }
+        },
         "inter.DeployController": {
             "type": "object",
             "properties": {
@@ -880,6 +1197,38 @@ const docTemplate = `{
                     "type": "string"
                 }
             }
+        },
+        "inter.MktItemOutput": {
+            "type": "object",
+            "properties": {
+                "company": {
+                    "type": "string"
+                },
+                "create_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "number"
+                },
+                "update_at": {
+                    "type": "string"
+                },
+                "uri": {
+                    "type": "integer"
+                },
+                "urlImage": {
+                    "type": "string"
+                }
+            }
+        },
+        "inter.MktItemsOutput": {
+            "type": "object"
         },
         "inter.TokenCreateInput": {
             "type": "object",

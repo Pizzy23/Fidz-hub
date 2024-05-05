@@ -267,7 +267,7 @@ func MintTransaction(input lInterface.MintRequest) (*lInterface.MintResponse, er
 }
 
 // Criar tokens para o contrato
-func CreateTokenType(contractID string, tokenDetails lInterface.TokenTypeRequest) (*lInterface.TokenTypeResponse, error) {
+func CreateTokenType(contractID string, tokenDetails lInterface.TokenTypeRequest) (*lInterface.TokenType, error) {
 	url := fmt.Sprintf("https://protocol-sandbox.lumx.io/v2/contracts/%s/token-types", contractID)
 	token := os.Getenv("API_TOKEN")
 	if token == "" {
@@ -303,7 +303,7 @@ func CreateTokenType(contractID string, tokenDetails lInterface.TokenTypeRequest
 
 	switch res.StatusCode {
 	case http.StatusCreated: // 201
-		var resp lInterface.TokenTypeResponse
+		var resp lInterface.TokenType
 		if err := json.Unmarshal(body, &resp); err != nil {
 			return nil, fmt.Errorf("error unmarshalling response: %v", err)
 		}

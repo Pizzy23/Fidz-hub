@@ -103,3 +103,8 @@ type PriceInfo struct {
 	TokenConvert string
 	Date         time.Time
 }
+
+type SaveToken struct {
+	UriNumber  uint64 `json:"uriNumber"`
+	ContractID string `json:"contract_id"`
+}

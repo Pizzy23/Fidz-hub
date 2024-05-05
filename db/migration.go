@@ -30,3 +30,32 @@ type Miner struct {
 	CreateAt          time.Time `gorm:"column:create_at;not null" json:"create_at"`
 	UpdateAt          time.Time `gorm:"column:update_at;not null" json:"update_at"`
 }
+
+type Company struct {
+	ID       uint      `gorm:"column:id;primaryKey;autoIncrement" json:"id"`
+	Name     string    `gorm:"column:name;not null" json:"name"`
+	CNPJ     string    `gorm:"column:cnpj;not null" json:"cnpj"`
+	URI      uint64    `gorm:"column:uri;not null" json:"uri"`
+	UrlImage *string   `gorm:"column:urlImage" json:"urlImage"`
+	CreateAt time.Time `gorm:"column:create_at;not null" json:"create_at"`
+	UpdateAt time.Time `gorm:"column:update_at;not null" json:"update_at"`
+}
+
+type MktItems struct {
+	ID       uint      `gorm:"column:id;primaryKey;autoIncrement" json:"id"`
+	Name     string    `gorm:"column:name" json:"name"`
+	Price    float64   `gorm:"column:price;not null" json:"price"`
+	Company  string    `gorm:"column:company;not null" json:"company"`
+	URI      uint64    `gorm:"column:uri;not null" json:"uri"`
+	UrlImage *string   `gorm:"column:urlImage" json:"urlImage"`
+	CreateAt time.Time `gorm:"column:create_at;not null" json:"create_at"`
+	UpdateAt time.Time `gorm:"column:update_at;not null" json:"update_at"`
+}
+
+type Token struct {
+	ID         uint      `gorm:"column:id;primaryKey;autoIncrement" json:"id"`
+	UriNumber  uint64    `gorm:"column:uriNumber" json:"uriNumber"`
+	ContractID string    `gorm:"column:contract_id" json:"contract_id"`
+	CreateAt   time.Time `gorm:"column:create_at;not null" json:"create_at"`
+	UpdateAt   time.Time `gorm:"column:update_at;not null" json:"update_at"`
+}

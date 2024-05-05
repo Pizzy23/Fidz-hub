@@ -1,7 +1,9 @@
 package service
 
 import (
+	"fanify/db"
 	inter "fanify/internal/tokens/interface"
+	"fanify/internal/tokens/storage"
 	"fanify/package/lumx"
 	lInterface "fanify/package/lumx/interface"
 	"fmt"
@@ -25,6 +27,16 @@ func CreateToken(c *gin.Context, input inter.TokenCreateInput) {
 	if err != nil {
 		c.Set("Error", "Error in lumx Api")
 		c.Status(http.StatusNotAcceptable)
+		return
+	}
+	inputDB := inter.SaveToken{
+		UriNumber:  uint64(res.UriNumber),
+		ContractID: res.ContractID,
+	}
+	_, err = storage.CreateTokenDb(db.Repo, inputDB)
+	if err != nil {
+		c.Set("Error", err)
+		c.Status(http.StatusInternalServerError)
 		return
 	}
 	c.Set("Response", res)
