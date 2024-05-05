@@ -129,7 +129,7 @@ func GainToken(c *gin.Context) {
 // @Param Authorization header string true "Token de autenticação (Colocar o token deixando o Bearer)" default(Bearer <token>)
 // @Success 200 {object} inter.AllTokensOutput "New User Created successfully"
 // @Failure 500 {object} errors.InternalServerError "Unable to store data in database"
-// @Router /api/all-token [get]
+// @Router /api/converter-token [get]
 func ConverterTokens(c *gin.Context) {
 	Token := c.GetHeader("Token")
 	service.ConvertToken(c, Token)

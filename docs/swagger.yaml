@@ -279,11 +279,11 @@ paths:
     get:
       consumes:
       - application/json
-      description: Converter tokens for money or another tokens
+      description: Create a new user in db
       parameters:
-      - description: Your tokens
+      - description: contract id
         in: header
-        name: Token
+        name: ContractId
         required: true
         type: string
       - default: Bearer <token>
@@ -303,7 +303,7 @@ paths:
           description: Unable to store data in database
           schema:
             $ref: '#/definitions/erros.InternalServerError'
-      summary: Converter tokens
+      summary: Get all Tokens
       tags:
       - Token
   /api/contract:
@@ -337,6 +337,37 @@ paths:
       summary: Pull a contract
       tags:
       - Contract
+  /api/converter-token:
+    get:
+      consumes:
+      - application/json
+      description: Converter tokens for money or another tokens
+      parameters:
+      - description: Your tokens
+        in: header
+        name: Token
+        required: true
+        type: string
+      - default: Bearer <token>
+        description: Token de autenticação (Colocar o token deixando o Bearer)
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: New User Created successfully
+          schema:
+            $ref: '#/definitions/inter.AllTokensOutput'
+        "500":
+          description: Unable to store data in database
+          schema:
+            $ref: '#/definitions/erros.InternalServerError'
+      summary: Converter tokens
+      tags:
+      - Token
   /api/create-contract:
     post:
       consumes:
