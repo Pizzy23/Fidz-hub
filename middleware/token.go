@@ -33,14 +33,6 @@ func generateToken() (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	return token.SignedString(getSecretKey())
 }
-func generateTokenTest() (string, error) {
-	claims := jwt.MapClaims{
-		"exp": time.Now().Add(time.Hour * 9999).Unix(),
-	}
-
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	return token.SignedString(getSecretKey())
-}
 
 // @Summary Criar token de auth
 // @Description Cria um toke para auth do usuario
@@ -58,28 +50,4 @@ func generateTokenHandler(c *gin.Context) {
 	token = "Bearer " + token
 	c.Set("Response", token)
 	c.Status(http.StatusOK)
-}
-
-type resTest struct {
-	Name        string `json:"name"`
-	Description string `json:"description"`
-}
-
-// @Summary Test Token
-// @Description Cria um toke para auth do usuario
-// @Tags Auth
-// @Accept json
-// @Produce json
-// @Param Authorization header string true "Token de autenticação" default(Bearer <token>)
-// @Success 200 {object} string "token make:"
-// @Router /api/test-token [post]
-func testeToken(c *gin.Context) {
-	res := resTest{
-		Name:        "token",
-		Description: "This token is valid",
-	}
-	statusCode := http.StatusOK
-
-	c.Set("Response", res)
-	c.Status(statusCode)
 }

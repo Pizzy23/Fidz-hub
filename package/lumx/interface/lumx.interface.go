@@ -7,6 +7,13 @@ type Contract struct {
 	Type        string `json:"type"`
 }
 
+type InputContract struct {
+	Name         string  `json:"name"`
+	Symbol       string  `json:"symbol"`
+	Description  *string `json:"description"`
+	ContractType string  `json:"contractType"`
+}
+
 type WalletResponse struct {
 	ID        string `json:"id"`
 	Address   string `json:"address"`
@@ -70,4 +77,40 @@ type TokenType struct {
 	MetadataUrl   string            `json:"metadataUrl"`
 	CreatedAt     string            `json:"createdAt"`
 	UpdatedAt     string            `json:"updatedAt"`
+}
+
+type ContractDeploymentResponse struct {
+	ID             string `json:"id"`
+	Type           string `json:"type"`
+	Address        string `json:"address"`
+	Name           string `json:"name"`
+	Symbol         string `json:"symbol"`
+	Description    string `json:"description"`
+	BlockchainName string `json:"blockchainName"`
+	BlockscanUrl   string `json:"blockscanUrl"`
+	CreatedAt      string `json:"createdAt"`
+	UpdatedAt      string `json:"updatedAt"`
+	DeployedAt     string `json:"deployedAt"`
+}
+
+type TokenTypes []TokenType
+
+type MintRequest struct {
+	ContractID string `json:"contractId"`
+	WalletID   string `json:"walletId"`
+	Quantity   int    `json:"quantity"`
+	URINumber  int    `json:"uriNumber"`
+}
+
+type TransactionResponse struct {
+	ID              string                 `json:"id"`
+	WalletID        string                 `json:"walletId"`
+	Status          string                 `json:"status"`
+	TransactionHash string                 `json:"transactionHash"`
+	Result          map[string]interface{} `json:"result"`
+	Request         MintRequest            `json:"request"`
+	Type            string                 `json:"type"`
+	CreatedAt       string                 `json:"createdAt"`
+	UpdatedAt       string                 `json:"updatedAt"`
+	CompletedAt     string                 `json:"completedAt"`
 }

@@ -1,3 +1,100 @@
+definitions:
+  base.BaseReq:
+    properties:
+      LogData:
+        $ref: '#/definitions/base.LogData'
+      ResponseData:
+        $ref: '#/definitions/base.ResponseData'
+    type: object
+  base.LogData:
+    properties:
+      ExecutionTime:
+        type: string
+      HttpStatusCode:
+        type: integer
+      IP:
+        type: string
+      Route:
+        type: string
+    type: object
+  base.ResponseData:
+    properties:
+      Response: {}
+    type: object
+  erros.InternalServerError:
+    properties:
+      BaseReq:
+        $ref: '#/definitions/base.BaseReq'
+      InternalServerError:
+        $ref: '#/definitions/erros.Message'
+      Response: {}
+    type: object
+  erros.Message:
+    properties:
+      message:
+        type: string
+    type: object
+  inter.ContractController:
+    properties:
+      contractType:
+        type: string
+      description:
+        type: string
+      name:
+        type: string
+      symbol:
+        type: string
+    type: object
+  inter.ContractDeploymentResponse:
+    properties:
+      address:
+        type: string
+      blockchainName:
+        type: string
+      blockscanUrl:
+        type: string
+      createdAt:
+        type: string
+      deployedAt:
+        type: string
+      description:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      symbol:
+        type: string
+      type:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  inter.DeployController:
+    properties:
+      contractId:
+        type: string
+    type: object
+  inter.UserController:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  inter.UserOutputController:
+    properties:
+      address:
+        type: string
+      createdAt:
+        type: string
+      id:
+        type: string
+      projectId:
+        type: string
+      updatedAt:
+        type: string
+    type: object
 externalDocs:
   description: OpenAPI
   url: https://swagger.io/resources/open-api/
@@ -8,14 +105,14 @@ info:
   title: Fanify Hub
   version: "1.0"
 paths:
-  /api/test-token:
-    post:
+  /api/all-contract:
+    get:
       consumes:
       - application/json
-      description: Cria um toke para auth do usuario
+      description: Create a new user in db
       parameters:
       - default: Bearer <token>
-        description: Token de autenticação
+        description: Token de autenticação (Colocar o token deixando o Bearer)
         in: header
         name: Authorization
         required: true
@@ -24,12 +121,174 @@ paths:
       - application/json
       responses:
         "200":
-          description: 'token make:'
+          description: New User Created successfully
           schema:
-            type: string
-      summary: Test Token
+            $ref: '#/definitions/inter.UserOutputController'
+        "500":
+          description: Unable to store data in database
+          schema:
+            $ref: '#/definitions/erros.InternalServerError'
+      summary: Create user
       tags:
-      - Auth
+      - Contract
+  /api/contract:
+    get:
+      consumes:
+      - application/json
+      description: Pull a contract from blockchain
+      parameters:
+      - description: contract Id
+        in: header
+        name: ContractId
+        required: true
+        type: string
+      - default: Bearer <token>
+        description: Token de autenticação (Colocar o token deixando o Bearer)
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: New User Created successfully
+          schema:
+            $ref: '#/definitions/inter.UserOutputController'
+        "500":
+          description: Unable to store data in database
+          schema:
+            $ref: '#/definitions/erros.InternalServerError'
+      summary: Pull a contract
+      tags:
+      - Contract
+  /api/create-contract:
+    post:
+      consumes:
+      - application/json
+      description: Create a new contract
+      parameters:
+      - description: Data for make a new contract
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/inter.ContractController'
+      - default: Bearer <token>
+        description: Token de autenticação (Colocar o token deixando o Bearer)
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: New Contract Created successfully
+          schema:
+            $ref: '#/definitions/inter.UserOutputController'
+        "500":
+          description: Error for make a new contract
+          schema:
+            $ref: '#/definitions/erros.InternalServerError'
+      summary: Create Contract
+      tags:
+      - Contract
+  /api/create-user:
+    post:
+      consumes:
+      - application/json
+      description: Create a new user in db
+      parameters:
+      - description: Data for make a new user
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/inter.UserController'
+      - default: Bearer <token>
+        description: Token de autenticação (Colocar o token deixando o Bearer)
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: New User Created successfully
+          schema:
+            $ref: '#/definitions/inter.UserOutputController'
+        "500":
+          description: Unable to store data in database
+          schema:
+            $ref: '#/definitions/erros.InternalServerError'
+      summary: Create user
+      tags:
+      - User
+  /api/deploy-contract:
+    post:
+      consumes:
+      - application/json
+      description: Deploy new contract in the blockchain
+      parameters:
+      - description: ContractId for deploy a new contract
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/inter.DeployController'
+      - default: Bearer <token>
+        description: Token de autenticação (Colocar o token deixando o Bearer)
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Deploy its a sucessfully
+          schema:
+            $ref: '#/definitions/inter.ContractDeploymentResponse'
+        "500":
+          description: Unable to make deploy
+          schema:
+            $ref: '#/definitions/erros.InternalServerError'
+      summary: Deploy new contract
+      tags:
+      - Contract
+  /api/user:
+    get:
+      consumes:
+      - application/json
+      description: pull user and wallet for db
+      parameters:
+      - description: E-mail from user
+        in: header
+        name: Email
+        required: true
+        type: string
+      - default: Bearer <token>
+        description: Token de autenticação (Colocar o token deixando o Bearer)
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: New User Created successfully
+          schema:
+            $ref: '#/definitions/inter.UserOutputController'
+        "500":
+          description: Unable to store data in database
+          schema:
+            $ref: '#/definitions/erros.InternalServerError'
+      summary: Get user
+      tags:
+      - User
   /token:
     get:
       consumes:

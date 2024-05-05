@@ -2,7 +2,9 @@ package lumx
 
 import (
 	"bytes"
+	inter "fanify/internal/user/interface"
 	lInterface "fanify/package/lumx/interface"
+	"strings"
 
 	"encoding/json"
 	"fmt"
@@ -11,6 +13,7 @@ import (
 	"os"
 )
 
+// Feito
 func PostLumxWallet() (*lInterface.WalletResponse, error) {
 	url := "https://protocol-sandbox.lumx.io/v2/wallets"
 	token := os.Getenv("API_TOKEN")
@@ -56,14 +59,21 @@ func PostLumxWallet() (*lInterface.WalletResponse, error) {
 	}
 }
 
-func CreateContractLumx(contract lInterface.Contract) (*lInterface.WalletResponse, error) {
+// Feito
+func CreateContractLumx(contract inter.ContractController) (*lInterface.WalletResponse, error) {
+	newContract := lInterface.Contract{
+		Name:        contract.Name,
+		Symbol:      contract.Symbol,
+		Description: *contract.Description,
+		Type:        contract.ContractType,
+	}
 	url := "https://protocol-sandbox.lumx.io/v2/contracts"
 	token := os.Getenv("API_TOKEN")
 	if token == "" {
 		return nil, fmt.Errorf("API token is not set in the environment variables")
 	}
 
-	payloadBytes, err := json.Marshal(contract)
+	payloadBytes, err := json.Marshal(newContract)
 	if err != nil {
 		return nil, fmt.Errorf("error marshalling contract: %v", err)
 	}
@@ -106,6 +116,152 @@ func CreateContractLumx(contract lInterface.Contract) (*lInterface.WalletRespons
 	}
 }
 
+// Feito
+func CreateTransfer(transferDetails lInterface.TransferDetails) (*lInterface.TransferResponse, error) {
+	url := "https://protocol-sandbox.lumx.io/v2/transactions/transfers"
+	token := os.Getenv("API_TOKEN")
+	if token == "" {
+		return nil, fmt.Errorf("API token is not set in the environment variables")
+	}
+
+	payloadBytes, err := json.Marshal(transferDetails)
+	if err != nil {
+		return nil, fmt.Errorf("error marshalling transfer details: %v", err)
+	}
+	payload := bytes.NewReader(payloadBytes)
+
+	req, err := http.NewRequest("POST", url, payload)
+	if err != nil {
+		return nil, fmt.Errorf("error creating request: %v", err)
+	}
+	req.Header.Add("Authorization", "Bearer "+token)
+	req.Header.Add("Content-Type", "application/json")
+
+	res, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return nil, fmt.Errorf("error performing request: %v", err)
+	}
+	defer res.Body.Close()
+
+	body, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		return nil, fmt.Errorf("error reading response body: %v", err)
+	}
+
+	switch res.StatusCode {
+	case http.StatusOK: // Assuming 200 is the success code for this API
+		var resp lInterface.TransferResponse
+		if err := json.Unmarshal(body, &resp); err != nil {
+			return nil, fmt.Errorf("error unmarshalling response: %v", err)
+		}
+		return &resp, nil
+	case http.StatusInternalServerError: // 500
+		var errResp lInterface.ErrorResponse
+		if err := json.Unmarshal(body, &errResp); err != nil {
+			return nil, fmt.Errorf("error unmarshalling error response: %v", err)
+		}
+		return nil, fmt.Errorf("api Error: %s", errResp.Error)
+	default:
+		return nil, fmt.Errorf("unexpected status code: %d", res.StatusCode)
+	}
+}
+
+// Feito
+func DeployContract(contractId string) (*lInterface.ContractDeploymentResponse, error) {
+	url := fmt.Sprintf("https://protocol-sandbox.lumx.io/v2/contracts/%s/deploy", contractId)
+	token := os.Getenv("API_TOKEN")
+	if token == "" {
+		return nil, fmt.Errorf("API token is not set in the environment variables")
+	}
+
+	req, err := http.NewRequest("POST", url, nil)
+	if err != nil {
+		return nil, fmt.Errorf("error creating request: %v", err)
+	}
+
+	req.Header.Add("Authorization", "Bearer "+token)
+
+	res, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return nil, fmt.Errorf("error performing request: %v", err)
+	}
+	defer res.Body.Close()
+
+	body, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		return nil, fmt.Errorf("error reading response body: %v", err)
+	}
+
+	switch res.StatusCode {
+	case http.StatusOK:
+		var resp lInterface.ContractDeploymentResponse
+		if err := json.Unmarshal(body, &resp); err != nil {
+			return nil, fmt.Errorf("error unmarshalling response: %v", err)
+		}
+		return &resp, nil
+	case http.StatusForbidden, http.StatusConflict, http.StatusInternalServerError:
+		var errResp lInterface.ErrorResponse
+		if err := json.Unmarshal(body, &errResp); err != nil {
+			return nil, fmt.Errorf("error unmarshalling error response: %v", err)
+		}
+		return nil, fmt.Errorf("API Error: %s", errResp.Error)
+	default:
+		return nil, fmt.Errorf("unexpected status code: %d", res.StatusCode)
+	}
+}
+
+// Transferir do contrato para carteira
+func MintTransaction(contractID, walletID string, quantity, uriNumber int, token string) (*lInterface.TransactionResponse, error) {
+	url := "https://protocol-sandbox.lumx.io/v2/transactions/mints"
+
+	requestBody, err := json.Marshal(lInterface.MintRequest{
+		ContractID: contractID,
+		WalletID:   walletID,
+		Quantity:   quantity,
+		URINumber:  uriNumber,
+	})
+	if err != nil {
+		return nil, fmt.Errorf("error encoding request body: %v", err)
+	}
+
+	req, err := http.NewRequest("POST", url, strings.NewReader(string(requestBody)))
+	if err != nil {
+		return nil, fmt.Errorf("error creating request: %v", err)
+	}
+
+	req.Header.Add("Authorization", "Bearer "+token)
+	req.Header.Add("Content-Type", "application/json")
+
+	res, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return nil, fmt.Errorf("error performing request: %v", err)
+	}
+	defer res.Body.Close()
+
+	body, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		return nil, fmt.Errorf("error reading response body: %v", err)
+	}
+
+	switch res.StatusCode {
+	case http.StatusOK:
+		var resp lInterface.TransactionResponse
+		if err := json.Unmarshal(body, &resp); err != nil {
+			return nil, fmt.Errorf("error unmarshalling response: %v", err)
+		}
+		return &resp, nil
+	case http.StatusForbidden, http.StatusConflict, http.StatusInternalServerError:
+		var errResp lInterface.ErrorResponse
+		if err := json.Unmarshal(body, &errResp); err != nil {
+			return nil, fmt.Errorf("error unmarshalling error response: %v", err)
+		}
+		return nil, fmt.Errorf("API Error: %s", errResp.Error)
+	default:
+		return nil, fmt.Errorf("unexpected status code: %d", res.StatusCode)
+	}
+}
+
+// Criar tokens para o contrato
 func CreateTokenType(contractID string, tokenDetails lInterface.TokenTypeResponse) (*lInterface.TokenTypeResponse, error) {
 	url := fmt.Sprintf("https://protocol-sandbox.lumx.io/v2/contracts/%s/token-types", contractID)
 	token := os.Getenv("API_TOKEN")
@@ -143,55 +299,6 @@ func CreateTokenType(contractID string, tokenDetails lInterface.TokenTypeRespons
 	switch res.StatusCode {
 	case http.StatusCreated: // 201
 		var resp lInterface.TokenTypeResponse
-		if err := json.Unmarshal(body, &resp); err != nil {
-			return nil, fmt.Errorf("error unmarshalling response: %v", err)
-		}
-		return &resp, nil
-	case http.StatusInternalServerError: // 500
-		var errResp lInterface.ErrorResponse
-		if err := json.Unmarshal(body, &errResp); err != nil {
-			return nil, fmt.Errorf("error unmarshalling error response: %v", err)
-		}
-		return nil, fmt.Errorf("api Error: %s", errResp.Error)
-	default:
-		return nil, fmt.Errorf("unexpected status code: %d", res.StatusCode)
-	}
-}
-
-func CreateTransfer(transferDetails lInterface.TransferDetails) (*lInterface.TransferResponse, error) {
-	url := "https://protocol-sandbox.lumx.io/v2/transactions/transfers"
-	token := os.Getenv("API_TOKEN")
-	if token == "" {
-		return nil, fmt.Errorf("API token is not set in the environment variables")
-	}
-
-	payloadBytes, err := json.Marshal(transferDetails)
-	if err != nil {
-		return nil, fmt.Errorf("error marshalling transfer details: %v", err)
-	}
-	payload := bytes.NewReader(payloadBytes)
-
-	req, err := http.NewRequest("POST", url, payload)
-	if err != nil {
-		return nil, fmt.Errorf("error creating request: %v", err)
-	}
-	req.Header.Add("Authorization", "Bearer "+token)
-	req.Header.Add("Content-Type", "application/json")
-
-	res, err := http.DefaultClient.Do(req)
-	if err != nil {
-		return nil, fmt.Errorf("error performing request: %v", err)
-	}
-	defer res.Body.Close()
-
-	body, err := ioutil.ReadAll(res.Body)
-	if err != nil {
-		return nil, fmt.Errorf("error reading response body: %v", err)
-	}
-
-	switch res.StatusCode {
-	case http.StatusOK: // Assuming 200 is the success code for this API
-		var resp lInterface.TransferResponse
 		if err := json.Unmarshal(body, &resp); err != nil {
 			return nil, fmt.Errorf("error unmarshalling response: %v", err)
 		}

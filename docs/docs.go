@@ -15,9 +15,9 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/api/test-token": {
-            "post": {
-                "description": "Cria um toke para auth do usuario",
+        "/api/all-contract": {
+            "get": {
+                "description": "Create a new user in db",
                 "consumes": [
                     "application/json"
                 ],
@@ -25,14 +25,14 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Auth"
+                    "Contract"
                 ],
-                "summary": "Test Token",
+                "summary": "Create user",
                 "parameters": [
                     {
                         "type": "string",
                         "default": "Bearer \u003ctoken\u003e",
-                        "description": "Token de autenticação",
+                        "description": "Token de autenticação (Colocar o token deixando o Bearer)",
                         "name": "Authorization",
                         "in": "header",
                         "required": true
@@ -40,9 +40,251 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "token make:",
+                        "description": "New User Created successfully",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/inter.UserOutputController"
+                        }
+                    },
+                    "500": {
+                        "description": "Unable to store data in database",
+                        "schema": {
+                            "$ref": "#/definitions/erros.InternalServerError"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/contract": {
+            "get": {
+                "description": "Pull a contract from blockchain",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Contract"
+                ],
+                "summary": "Pull a contract",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "contract Id",
+                        "name": "ContractId",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "default": "Bearer \u003ctoken\u003e",
+                        "description": "Token de autenticação (Colocar o token deixando o Bearer)",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "New User Created successfully",
+                        "schema": {
+                            "$ref": "#/definitions/inter.UserOutputController"
+                        }
+                    },
+                    "500": {
+                        "description": "Unable to store data in database",
+                        "schema": {
+                            "$ref": "#/definitions/erros.InternalServerError"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/create-contract": {
+            "post": {
+                "description": "Create a new contract",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Contract"
+                ],
+                "summary": "Create Contract",
+                "parameters": [
+                    {
+                        "description": "Data for make a new contract",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/inter.ContractController"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "default": "Bearer \u003ctoken\u003e",
+                        "description": "Token de autenticação (Colocar o token deixando o Bearer)",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "New Contract Created successfully",
+                        "schema": {
+                            "$ref": "#/definitions/inter.UserOutputController"
+                        }
+                    },
+                    "500": {
+                        "description": "Error for make a new contract",
+                        "schema": {
+                            "$ref": "#/definitions/erros.InternalServerError"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/create-user": {
+            "post": {
+                "description": "Create a new user in db",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Create user",
+                "parameters": [
+                    {
+                        "description": "Data for make a new user",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/inter.UserController"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "default": "Bearer \u003ctoken\u003e",
+                        "description": "Token de autenticação (Colocar o token deixando o Bearer)",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "New User Created successfully",
+                        "schema": {
+                            "$ref": "#/definitions/inter.UserOutputController"
+                        }
+                    },
+                    "500": {
+                        "description": "Unable to store data in database",
+                        "schema": {
+                            "$ref": "#/definitions/erros.InternalServerError"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/deploy-contract": {
+            "post": {
+                "description": "Deploy new contract in the blockchain",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Contract"
+                ],
+                "summary": "Deploy new contract",
+                "parameters": [
+                    {
+                        "description": "ContractId for deploy a new contract",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/inter.DeployController"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "default": "Bearer \u003ctoken\u003e",
+                        "description": "Token de autenticação (Colocar o token deixando o Bearer)",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Deploy its a sucessfully",
+                        "schema": {
+                            "$ref": "#/definitions/inter.ContractDeploymentResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Unable to make deploy",
+                        "schema": {
+                            "$ref": "#/definitions/erros.InternalServerError"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/user": {
+            "get": {
+                "description": "pull user and wallet for db",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Get user",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "E-mail from user",
+                        "name": "Email",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "default": "Bearer \u003ctoken\u003e",
+                        "description": "Token de autenticação (Colocar o token deixando o Bearer)",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "New User Created successfully",
+                        "schema": {
+                            "$ref": "#/definitions/inter.UserOutputController"
+                        }
+                    },
+                    "500": {
+                        "description": "Unable to store data in database",
+                        "schema": {
+                            "$ref": "#/definitions/erros.InternalServerError"
                         }
                     }
                 }
@@ -68,6 +310,156 @@ const docTemplate = `{
                             "type": "string"
                         }
                     }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "base.BaseReq": {
+            "type": "object",
+            "properties": {
+                "LogData": {
+                    "$ref": "#/definitions/base.LogData"
+                },
+                "ResponseData": {
+                    "$ref": "#/definitions/base.ResponseData"
+                }
+            }
+        },
+        "base.LogData": {
+            "type": "object",
+            "properties": {
+                "ExecutionTime": {
+                    "type": "string"
+                },
+                "HttpStatusCode": {
+                    "type": "integer"
+                },
+                "IP": {
+                    "type": "string"
+                },
+                "Route": {
+                    "type": "string"
+                }
+            }
+        },
+        "base.ResponseData": {
+            "type": "object",
+            "properties": {
+                "Response": {}
+            }
+        },
+        "erros.InternalServerError": {
+            "type": "object",
+            "properties": {
+                "BaseReq": {
+                    "$ref": "#/definitions/base.BaseReq"
+                },
+                "InternalServerError": {
+                    "$ref": "#/definitions/erros.Message"
+                },
+                "Response": {}
+            }
+        },
+        "erros.Message": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "inter.ContractController": {
+            "type": "object",
+            "properties": {
+                "contractType": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "symbol": {
+                    "type": "string"
+                }
+            }
+        },
+        "inter.ContractDeploymentResponse": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "blockchainName": {
+                    "type": "string"
+                },
+                "blockscanUrl": {
+                    "type": "string"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "deployedAt": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "symbol": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "inter.DeployController": {
+            "type": "object",
+            "properties": {
+                "contractId": {
+                    "type": "string"
+                }
+            }
+        },
+        "inter.UserController": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "inter.UserOutputController": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "projectId": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
                 }
             }
         }
