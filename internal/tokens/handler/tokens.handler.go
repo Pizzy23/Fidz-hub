@@ -109,7 +109,7 @@ func MakeTrade(c *gin.Context) {
 // @Param Authorization header string true "Token de autenticação (Colocar o token deixando o Bearer)" default(Bearer <token>)
 // @Success 200 {object} inter.TransactionRes "Your tokens is be send for your account"
 // @Failure 500 {object} errors.InternalServerError "Unable to store data in database"
-// @Router /api/make-trade [post]
+// @Router /api/gain-tokens [post]
 func GainToken(c *gin.Context) {
 	var input inter.Gimmetoken
 	if err := c.BindJSON(&input); err != nil {

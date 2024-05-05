@@ -14,7 +14,7 @@ import (
 // @version 0.1
 // @description API
 // @termsOfService http://swagger.io/terms/
-// @host localhost:8080
+// @host 52.15.128.117:8080
 // @BasePath /api
 func SetupRouter() *gin.Engine {
 	r := gin.Default()
@@ -26,12 +26,12 @@ func SetupRouter() *gin.Engine {
 	//Use response, but not Token
 	r.GET("/token", generateTokenHandler)
 	r.PUT("/login", LoginUser)
-
+	r.POST("/create-user", user.CreateUser)
 	auth := r.Group("/api")
 	auth.Use(authMiddleware)
 
 	//Response and token service
-	auth.POST("/create-user", user.CreateUser)
+
 	auth.POST("/create-contract", user.CreateContract)
 
 	auth.POST("/deploy-contract", user.DeployContract)
@@ -48,6 +48,7 @@ func SetupRouter() *gin.Engine {
 	auth.GET("/all-token", tokens.GetAllToken)
 
 	auth.GET("/converter", tokens.ConverterTokens)
+	auth.GET("/gain-tokens", tokens.GainToken)
 
 	return r
 }

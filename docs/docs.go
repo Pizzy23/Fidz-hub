@@ -288,54 +288,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/create-user": {
-            "post": {
-                "description": "Create a new user in db",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "User"
-                ],
-                "summary": "Create user",
-                "parameters": [
-                    {
-                        "description": "Data for make a new user",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/inter.UserController"
-                        }
-                    },
-                    {
-                        "type": "string",
-                        "default": "Bearer \u003ctoken\u003e",
-                        "description": "Token de autenticação (Colocar o token deixando o Bearer)",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "New User Created successfully",
-                        "schema": {
-                            "$ref": "#/definitions/inter.UserOutputController"
-                        }
-                    },
-                    "500": {
-                        "description": "Unable to store data in database",
-                        "schema": {
-                            "$ref": "#/definitions/erros.InternalServerError"
-                        }
-                    }
-                }
-            }
-        },
         "/api/deploy-contract": {
             "post": {
                 "description": "Deploy new contract in the blockchain",
@@ -377,6 +329,54 @@ const docTemplate = `{
                     },
                     "500": {
                         "description": "Unable to make deploy",
+                        "schema": {
+                            "$ref": "#/definitions/erros.InternalServerError"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/gain-tokens": {
+            "post": {
+                "description": "This would be implemented as the application remains open. RoadMap is mocked, and this randomly generates a number, and gives an FDZ that can be 0.000001 or 1",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Token"
+                ],
+                "summary": "Gain token",
+                "parameters": [
+                    {
+                        "description": "Data for gain tokens :)",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/inter.Gimmetoken"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "default": "Bearer \u003ctoken\u003e",
+                        "description": "Token de autenticação (Colocar o token deixando o Bearer)",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Your tokens is be send for your account",
+                        "schema": {
+                            "$ref": "#/definitions/inter.TransactionRes"
+                        }
+                    },
+                    "500": {
+                        "description": "Unable to store data in database",
                         "schema": {
                             "$ref": "#/definitions/erros.InternalServerError"
                         }
@@ -485,7 +485,7 @@ const docTemplate = `{
         },
         "/api/make-trade": {
             "post": {
-                "description": "This would be implemented as the application remains open. RoadMap is mocked, and this randomly generates a number, and gives an FDZ that can be 0.000001 or 1",
+                "description": "Create a transfer from a user to a new token",
                 "consumes": [
                     "application/json"
                 ],
@@ -495,15 +495,15 @@ const docTemplate = `{
                 "tags": [
                     "Token"
                 ],
-                "summary": "Gain token",
+                "summary": "Make a Trade",
                 "parameters": [
                     {
-                        "description": "Data for gain tokens :)",
+                        "description": "Data for make a new user",
                         "name": "request",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/inter.Gimmetoken"
+                            "$ref": "#/definitions/inter.Trade"
                         }
                     },
                     {
@@ -517,9 +517,9 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "Your tokens is be send for your account",
+                        "description": "New User Created successfully",
                         "schema": {
-                            "$ref": "#/definitions/inter.TransactionRes"
+                            "$ref": "#/definitions/inter.UserOutputController"
                         }
                     },
                     "500": {
@@ -599,6 +599,54 @@ const docTemplate = `{
                         "name": "Email",
                         "in": "header",
                         "required": true
+                    },
+                    {
+                        "type": "string",
+                        "default": "Bearer \u003ctoken\u003e",
+                        "description": "Token de autenticação (Colocar o token deixando o Bearer)",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "New User Created successfully",
+                        "schema": {
+                            "$ref": "#/definitions/inter.UserOutputController"
+                        }
+                    },
+                    "500": {
+                        "description": "Unable to store data in database",
+                        "schema": {
+                            "$ref": "#/definitions/erros.InternalServerError"
+                        }
+                    }
+                }
+            }
+        },
+        "/create-user": {
+            "post": {
+                "description": "Create a new user in db",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Create user",
+                "parameters": [
+                    {
+                        "description": "Data for make a new user",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/inter.UserController"
+                        }
                     },
                     {
                         "type": "string",

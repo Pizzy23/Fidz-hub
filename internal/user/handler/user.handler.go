@@ -17,7 +17,7 @@ import (
 // @Param Authorization header string true "Token de autenticação (Colocar o token deixando o Bearer)" default(Bearer <token>)
 // @Success 200 {object} inter.UserOutputController "New User Created successfully"
 // @Failure 500 {object} errors.InternalServerError "Unable to store data in database"
-// @Router /api/create-user [post]
+// @Router /create-user [post]
 func CreateUser(c *gin.Context) {
 	var user inter.UserController
 	if err := c.BindJSON(&user); err != nil {
