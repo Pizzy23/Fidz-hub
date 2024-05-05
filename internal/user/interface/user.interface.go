@@ -10,6 +10,7 @@ type UserControllerInputDb struct {
 	Wallet    string `json:"wallet"`
 	WalletId  string `json:"walletId"`
 	ProjectId string `json:"projectId"`
+	LoginId   uint   `json:"loginId"`
 }
 
 type UserOutputController struct {

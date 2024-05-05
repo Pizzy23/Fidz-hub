@@ -63,12 +63,25 @@ func CreateUser(c *gin.Context, user inter.UserController) {
 			c.Status(http.StatusInternalServerError)
 			return
 		}
+		login, err := storage.CreateLogin(db.Repo, user.Email, true)
+		if err != nil {
+			c.Set("Error", err)
+			c.Status(http.StatusInternalServerError)
+			return
+		}
+		encryptedPassword, err := util.Encrypt(user.Password)
+		if err != nil {
+			c.Set("Response", "Error encrypting Password")
+			c.Status(http.StatusInternalServerError)
+
+		}
 		newUser := inter.UserControllerInputDb{
 			Email:     user.Email,
-			Password:  user.Password,
+			Password:  encryptedPassword,
 			Wallet:    wallet.Address,
 			WalletId:  wallet.ID,
 			ProjectId: wallet.ProjectID,
+			LoginId:   login.ID,
 		}
 		res, err := storage.CreateUser(db.Repo, newUser)
 		if err != nil {
@@ -104,5 +117,25 @@ func DeployContract(c *gin.Context, input inter.DeployController) {
 		return
 	}
 	c.Set("Response", res)
+	c.Status(http.StatusOK)
+}
+
+func UserLogins(c *gin.Context, email string, status bool) {
+	validEmail := util.IsValidEmail(email)
+	if validEmail {
+		c.Set("Error", "E-mail is invalid")
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	_, err := storage.CreateLogin(db.Repo, email, status)
+	if err != nil {
+		c.Set("Error", err)
+		c.Status(http.StatusInternalServerError)
+		return
+	}
+	if status {
+		return
+	}
+	c.Set("Response", "User loggout")
 	c.Status(http.StatusOK)
 }

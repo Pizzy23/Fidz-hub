@@ -106,7 +106,22 @@ func PullAllContract(c *gin.Context) {
 // @Success 200 {object} inter.UserOutputController "New User Created successfully"
 // @Failure 500 {object} errors.InternalServerError "Unable to store data in database"
 // @Router /api/user [get]
-func PullUserContract(c *gin.Context) {
+func PullUser(c *gin.Context) {
 	Email := c.GetHeader("Email")
 	service.PullUser(c, Email)
+}
+
+// @Summary Loggout User
+// @Description pull user and wallet for db
+// @Tags User
+// @Accept json
+// @Produce json
+// @Param Email header string true  "E-mail from user"
+// @Param Authorization header string true "Token de autenticação (Colocar o token deixando o Bearer)" default(Bearer <token>)
+// @Success 200 {object} inter.UserOutputController "New User Created successfully"
+// @Failure 500 {object} errors.InternalServerError "Unable to store data in database"
+// @Router /api/loggout [put]
+func LoggoutUser(c *gin.Context) {
+	Email := c.GetHeader("Email")
+	service.UserLogins(c, Email, false)
 }

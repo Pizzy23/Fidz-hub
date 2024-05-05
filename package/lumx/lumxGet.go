@@ -10,7 +10,7 @@ import (
 	"os"
 )
 
-// Ver detalhes do contrato
+// Feito
 func FetchContractDetails(contractId string) (*lInterface.GetContract, error) {
 	url := fmt.Sprintf("https://protocol-sandbox.lumx.io/v2/contracts/%s", contractId)
 	token := os.Getenv("API_TOKEN") // Ensure you have this environment variable set up
@@ -43,7 +43,7 @@ func FetchContractDetails(contractId string) (*lInterface.GetContract, error) {
 	return &contract, nil
 }
 
-// Pegar todos os contratos
+// Feito
 func FetchContracts() (*lInterface.GetContractsResponse, error) {
 	url := "https://protocol-sandbox.lumx.io/v2/contracts"
 	token := os.Getenv("API_TOKEN")

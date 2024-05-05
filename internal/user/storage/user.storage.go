@@ -13,7 +13,11 @@ func ConsultUser(q *gorm.DB, email string) (*db.User, error) {
 	if err := q.Where("email = ?", email).First(&user).Error; err != nil {
 		return nil, err
 	}
-
+	var login db.Login
+	if err := q.Where("email = ?", email).First(&login).Error; err != nil {
+		return nil, err
+	}
+	user.Login = login
 	return &user, nil
 }
 
@@ -31,4 +35,19 @@ func CreateUser(q *gorm.DB, input inter.UserControllerInputDb) (*db.User, error)
 	}
 
 	return &newUser, nil
+}
+
+func CreateLogin(q *gorm.DB, email string, status bool) (*db.Login, error) {
+	CreateAt := time.Now()
+	UpdateAt := time.Now()
+	newLogin := &db.Login{
+		Email:    email,
+		IsLogged: status,
+		CreateAt: CreateAt,
+		UpdateAt: UpdateAt,
+	}
+	if err := q.Create(newLogin).Error; err != nil {
+		return nil, err
+	}
+	return newLogin, nil
 }

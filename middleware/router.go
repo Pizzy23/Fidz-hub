@@ -2,6 +2,7 @@ package middleware
 
 import (
 	_ "fanify/docs"
+	tokens "fanify/internal/tokens/handler"
 	user "fanify/internal/user/handler"
 
 	"github.com/gin-gonic/gin"
@@ -24,24 +25,27 @@ func SetupRouter() *gin.Engine {
 
 	//Use response, but not Token
 	r.GET("/token", generateTokenHandler)
-	r.PUT("/login")
+	r.PUT("/login", LoginUser)
 
 	auth := r.Group("/api")
 	auth.Use(authMiddleware)
 
 	//Response and token service
 	auth.POST("/create-user", user.CreateUser)
-	auth.POST("/create-contract")
-	auth.POST("/create-token")
-	auth.POST("/make-transfer")
-	auth.POST("/deploy-contract")
-	auth.GET("/contract-details")
-	auth.GET("/all-contracts")
-	auth.GET("/token")
-	auth.GET("/all-token")
+	auth.POST("/create-contract", user.CreateContract)
+
+	auth.POST("/deploy-contract", user.DeployContract)
+	auth.GET("/contract-details", user.PullContract)
+	auth.GET("/all-contracts", user.PullAllContract)
 
 	auth.PUT("/logged")
-	auth.GET("/user")
+	auth.GET("/user", user.PullUser)
+
+	auth.POST("/create-token", tokens.CreateToken)
+	auth.POST("/make-transfer", tokens.MakeTransfer)
+	auth.POST("/make-transfer", tokens.MakeTrade)
+	auth.GET("/token", tokens.GetToken)
+	auth.GET("/all-token", tokens.GetAllToken)
 
 	return r
 }
