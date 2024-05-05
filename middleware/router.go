@@ -11,7 +11,7 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
-// @title TokenApi
+// @title Fidz
 // @version 0.1
 // @description API
 // @termsOfService http://swagger.io/terms/
@@ -37,7 +37,7 @@ func SetupRouter() *gin.Engine {
 
 	auth.POST("/deploy-contract", user.DeployContract)
 	auth.GET("/contract-details", user.PullContract)
-	auth.GET("/all-contracts", user.PullAllContract)
+	auth.GET("/all-contract", user.PullAllContract)
 
 	auth.PUT("/logged")
 	auth.GET("/user", user.PullUser)

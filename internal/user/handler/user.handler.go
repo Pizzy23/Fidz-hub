@@ -83,8 +83,8 @@ func PullContract(c *gin.Context) {
 	service.PullContract(c, ContractId)
 }
 
-// @Summary Create user
-// @Description Create a new user in db
+// @Summary Get All contracts
+// @Description Get All contracts
 // @Tags Contract
 // @Accept json
 // @Produce json

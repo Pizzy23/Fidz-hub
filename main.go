@@ -5,7 +5,7 @@ import (
 	"fanify/middleware"
 )
 
-// @title           Fanify Hub
+// @title           Fidz
 // @version         1.0
 // @description     This is a server for app.
 
