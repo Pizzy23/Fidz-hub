@@ -279,11 +279,11 @@ paths:
     get:
       consumes:
       - application/json
-      description: Create a new user in db
+      description: Converter tokens for money or another tokens
       parameters:
-      - description: contract id
+      - description: Your tokens
         in: header
-        name: ContractId
+        name: Token
         required: true
         type: string
       - default: Bearer <token>
@@ -303,7 +303,7 @@ paths:
           description: Unable to store data in database
           schema:
             $ref: '#/definitions/erros.InternalServerError'
-      summary: Get all Tokens
+      summary: Converter tokens
       tags:
       - Token
   /api/contract:

@@ -56,7 +56,7 @@ const docTemplate = `{
         },
         "/api/all-token": {
             "get": {
-                "description": "Create a new user in db",
+                "description": "Converter tokens for money or another tokens",
                 "consumes": [
                     "application/json"
                 ],
@@ -66,12 +66,12 @@ const docTemplate = `{
                 "tags": [
                     "Token"
                 ],
-                "summary": "Get all Tokens",
+                "summary": "Converter tokens",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "contract id",
-                        "name": "ContractId",
+                        "description": "Your tokens",
+                        "name": "Token",
                         "in": "header",
                         "required": true
                     },
