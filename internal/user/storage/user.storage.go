@@ -51,3 +51,14 @@ func CreateLogin(q *gorm.DB, email string, status bool) (*db.Login, error) {
 	}
 	return newLogin, nil
 }
+
+func InputCurrentMiner(q *gorm.DB, wallet string, mined int) (*db.Miner, error) {
+	input := &db.Miner{
+		WalletID:          wallet,
+		CurrentMinerDaily: float64(mined),
+	}
+	if err := q.Create(input).Error; err != nil {
+		return nil, err
+	}
+	return input, nil
+}

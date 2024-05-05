@@ -87,6 +87,7 @@ func GainTokens(c *gin.Context, input inter.Gimmetoken) {
 		Quantity:   randomNumber,
 		URINumber:  input.URINumber,
 	}
+
 	res, err := lumx.MintTransaction(newInput)
 	if err != nil {
 		c.Set("Error", "Error in lumx Api")

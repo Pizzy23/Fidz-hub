@@ -22,3 +22,11 @@ type Login struct {
 	CreateAt time.Time `gorm:"column:create_at;not null" json:"create_at"`
 	UpdateAt time.Time `gorm:"column:update_at;not null" json:"update_at"`
 }
+
+type Miner struct {
+	ID                uint      `gorm:"column:id;primaryKey;autoIncrement" json:"id"`
+	WalletID          string    `gorm:"column:walletID;unique;not null" json:"walletID"`
+	CurrentMinerDaily float64   `gorm:"column:mine;unique;not null" json:"mine"`
+	CreateAt          time.Time `gorm:"column:create_at;not null" json:"create_at"`
+	UpdateAt          time.Time `gorm:"column:update_at;not null" json:"update_at"`
+}
