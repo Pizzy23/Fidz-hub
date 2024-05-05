@@ -211,14 +211,19 @@ func DeployContract(contractId string) (*lInterface.ContractDeploymentResponse, 
 }
 
 // Transferir do contrato para carteira
-func MintTransaction(contractID, walletID string, quantity, uriNumber int, token string) (*lInterface.TransactionResponse, error) {
+func MintTransaction(input lInterface.MintRequest) (*lInterface.MintResponse, error) {
 	url := "https://protocol-sandbox.lumx.io/v2/transactions/mints"
 
+	token := os.Getenv("API_TOKEN")
+	if token == "" {
+		return nil, fmt.Errorf("API token is not set in the environment variables")
+	}
+
 	requestBody, err := json.Marshal(lInterface.MintRequest{
-		ContractID: contractID,
-		WalletID:   walletID,
-		Quantity:   quantity,
-		URINumber:  uriNumber,
+		ContractID: input.ContractID,
+		WalletID:   input.WalletID,
+		Quantity:   input.Quantity,
+		URINumber:  input.URINumber,
 	})
 	if err != nil {
 		return nil, fmt.Errorf("error encoding request body: %v", err)
@@ -245,7 +250,7 @@ func MintTransaction(contractID, walletID string, quantity, uriNumber int, token
 
 	switch res.StatusCode {
 	case http.StatusOK:
-		var resp lInterface.TransactionResponse
+		var resp lInterface.MintResponse
 		if err := json.Unmarshal(body, &resp); err != nil {
 			return nil, fmt.Errorf("error unmarshalling response: %v", err)
 		}
@@ -262,7 +267,7 @@ func MintTransaction(contractID, walletID string, quantity, uriNumber int, token
 }
 
 // Criar tokens para o contrato
-func CreateTokenType(contractID string, tokenDetails lInterface.TokenTypeResponse) (*lInterface.TokenTypeResponse, error) {
+func CreateTokenType(contractID string, tokenDetails lInterface.TokenTypeRequest) (*lInterface.TokenTypeResponse, error) {
 	url := fmt.Sprintf("https://protocol-sandbox.lumx.io/v2/contracts/%s/token-types", contractID)
 	token := os.Getenv("API_TOKEN")
 	if token == "" {

@@ -43,8 +43,8 @@ func SetupRouter() *gin.Engine {
 
 	auth.POST("/create-token", tokens.CreateToken)
 	auth.POST("/make-transfer", tokens.MakeTransfer)
-	auth.POST("/make-transfer", tokens.MakeTrade)
-	auth.GET("/token", tokens.GetToken)
+	auth.POST("/make-trade", tokens.MakeTrade)
+	auth.GET("/get-token", tokens.GetToken)
 	auth.GET("/all-token", tokens.GetAllToken)
 
 	return r

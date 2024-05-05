@@ -34,6 +34,13 @@ definitions:
       message:
         type: string
     type: object
+  inter.AllTokensOutput:
+    properties:
+      tokens:
+        items:
+          $ref: '#/definitions/inter.TokenCreateOutput'
+        type: array
+    type: object
   inter.ContractController:
     properties:
       contractType:
@@ -73,6 +80,100 @@ definitions:
   inter.DeployController:
     properties:
       contractId:
+        type: string
+    type: object
+  inter.TokenCreateInput:
+    properties:
+      description:
+        type: string
+      imageUrl:
+        type: string
+      maxSupply:
+        type: integer
+      name:
+        type: string
+      traits:
+        additionalProperties:
+          type: string
+        type: object
+    type: object
+  inter.TokenCreateOutput:
+    properties:
+      contractId:
+        type: string
+      createdAt:
+        type: string
+      currentSupply:
+        type: integer
+      description:
+        type: string
+      id:
+        type: string
+      imageUrl:
+        type: string
+      maxSupply:
+        type: integer
+      metadataUrl:
+        type: string
+      name:
+        type: string
+      traits:
+        additionalProperties:
+          type: string
+        type: object
+      updatedAt:
+        type: string
+      uriNumber:
+        type: integer
+    type: object
+  inter.Trade:
+    properties:
+      transaction1:
+        $ref: '#/definitions/inter.Transaction'
+      transaction2:
+        $ref: '#/definitions/inter.Transaction'
+    type: object
+  inter.Transaction:
+    properties:
+      contractId:
+        type: string
+      from:
+        type: string
+      to:
+        type: string
+      tokenId:
+        type: string
+    type: object
+  inter.TransferOutput:
+    properties:
+      completedAt:
+        type: string
+      createdAt:
+        type: string
+      id:
+        type: string
+      request:
+        properties:
+          contractId:
+            type: string
+          from:
+            type: string
+          quantity:
+            type: integer
+          to:
+            type: string
+        type: object
+      result:
+        type: object
+      status:
+        type: string
+      transactionHash:
+        type: string
+      type:
+        type: string
+      updatedAt:
+        type: string
+      walletId:
         type: string
     type: object
   inter.UserController:
@@ -131,6 +232,37 @@ paths:
       summary: Create user
       tags:
       - Contract
+  /api/all-token:
+    get:
+      consumes:
+      - application/json
+      description: Create a new user in db
+      parameters:
+      - description: contract id
+        in: header
+        name: ContractId
+        required: true
+        type: string
+      - default: Bearer <token>
+        description: Token de autenticação (Colocar o token deixando o Bearer)
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: New User Created successfully
+          schema:
+            $ref: '#/definitions/inter.AllTokensOutput'
+        "500":
+          description: Unable to store data in database
+          schema:
+            $ref: '#/definitions/erros.InternalServerError'
+      summary: Get all Tokens
+      tags:
+      - Token
   /api/contract:
     get:
       consumes:
@@ -194,6 +326,38 @@ paths:
       summary: Create Contract
       tags:
       - Contract
+  /api/create-token:
+    post:
+      consumes:
+      - application/json
+      description: Create a new user in db
+      parameters:
+      - description: Data for make a new token
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/inter.TokenCreateInput'
+      - default: Bearer <token>
+        description: Token de autenticação (Colocar o token deixando o Bearer)
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: New Token Created successfully
+          schema:
+            $ref: '#/definitions/inter.TokenCreateOutput'
+        "500":
+          description: Unable to created a new token
+          schema:
+            $ref: '#/definitions/erros.InternalServerError'
+      summary: Make Tokens
+      tags:
+      - Token
   /api/create-user:
     post:
       consumes:
@@ -258,6 +422,137 @@ paths:
       summary: Deploy new contract
       tags:
       - Contract
+  /api/get-token:
+    get:
+      consumes:
+      - application/json
+      description: Create a new user in db
+      parameters:
+      - description: E-mail from user
+        in: header
+        name: ContractId
+        required: true
+        type: string
+      - description: Its a uri content in tokens
+        in: header
+        name: UriToken
+        required: true
+        type: string
+      - default: Bearer <token>
+        description: Token de autenticação (Colocar o token deixando o Bearer)
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: New User Created successfully
+          schema:
+            $ref: '#/definitions/inter.UserOutputController'
+        "500":
+          description: Unable to store data in database
+          schema:
+            $ref: '#/definitions/erros.InternalServerError'
+      summary: Get specify token
+      tags:
+      - Token
+  /api/loggout:
+    put:
+      consumes:
+      - application/json
+      description: pull user and wallet for db
+      parameters:
+      - description: E-mail from user
+        in: header
+        name: Email
+        required: true
+        type: string
+      - default: Bearer <token>
+        description: Token de autenticação (Colocar o token deixando o Bearer)
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: New User Created successfully
+          schema:
+            $ref: '#/definitions/inter.UserOutputController'
+        "500":
+          description: Unable to store data in database
+          schema:
+            $ref: '#/definitions/erros.InternalServerError'
+      summary: Loggout User
+      tags:
+      - User
+  /api/make-trade:
+    post:
+      consumes:
+      - application/json
+      description: Create a transfer from a user to a new token
+      parameters:
+      - description: Data for make a new user
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/inter.Trade'
+      - default: Bearer <token>
+        description: Token de autenticação (Colocar o token deixando o Bearer)
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: New User Created successfully
+          schema:
+            $ref: '#/definitions/inter.UserOutputController'
+        "500":
+          description: Unable to store data in database
+          schema:
+            $ref: '#/definitions/erros.InternalServerError'
+      summary: Make a Trade
+      tags:
+      - Token
+  /api/make-transfer:
+    post:
+      consumes:
+      - application/json
+      description: Create a transfer from a user to a user
+      parameters:
+      - description: Data for make a new user
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/inter.Transaction'
+      - default: Bearer <token>
+        description: Token de autenticação (Colocar o token deixando o Bearer)
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Transfer is by sucessfull
+          schema:
+            $ref: '#/definitions/inter.TransferOutput'
+        "500":
+          description: Unable to store data in database
+          schema:
+            $ref: '#/definitions/erros.InternalServerError'
+      summary: Make a transfer
+      tags:
+      - Token
   /api/user:
     get:
       consumes:
@@ -289,11 +584,17 @@ paths:
       summary: Get user
       tags:
       - User
-  /token:
-    get:
+  /login:
+    put:
       consumes:
       - application/json
-      description: Cria um toke para auth do usuario
+      description: Login user and give a acess token
+      parameters:
+      - description: E-mail from user
+        in: header
+        name: Email
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -301,7 +602,26 @@ paths:
           description: 'token make:'
           schema:
             type: string
-      summary: Criar token de auth
+        "500":
+          description: User not found in db
+          schema:
+            type: string
+      summary: Login User
+      tags:
+      - User
+  /token:
+    get:
+      consumes:
+      - application/json
+      description: Creat a token for external apis
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 'token make:'
+          schema:
+            type: string
+      summary: Creat a token for apis
       tags:
       - Auth
 securityDefinitions:

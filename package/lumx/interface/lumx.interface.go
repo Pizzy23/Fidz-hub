@@ -34,7 +34,7 @@ type TransferDetails struct {
 	ContractId string `json:"contractId"`
 	From       string `json:"from"`
 	To         string `json:"to"`
-	TokenId    string `json:"tokenId"`
+	Quantity   int    `json:"quantity"`
 }
 
 type TransferResponse struct {
@@ -113,4 +113,28 @@ type TransactionResponse struct {
 	CreatedAt       string                 `json:"createdAt"`
 	UpdatedAt       string                 `json:"updatedAt"`
 	CompletedAt     string                 `json:"completedAt"`
+}
+
+type MintResponse struct {
+	ID              string            `json:"id"`
+	WalletID        string            `json:"walletId"`
+	Status          string            `json:"status"`
+	TransactionHash string            `json:"transactionHash"`
+	Result          map[string]string `json:"result"`
+	Request         struct {
+		ContractID string `json:"contractId"`
+		Quantity   int    `json:"quantity"`
+	} `json:"request"`
+	Type        string `json:"type"`
+	CreatedAt   string `json:"createdAt"`
+	UpdatedAt   string `json:"updatedAt"`
+	CompletedAt string `json:"completedAt"`
+}
+
+type TokenTypeRequest struct {
+	Traits      map[string]string `json:"traits,omitempty"`
+	MaxSupply   int               `json:"maxSupply"`
+	Name        string            `json:"name"`
+	Description string            `json:"description"`
+	ImageURL    *string           `json:"imageUrl"`
 }

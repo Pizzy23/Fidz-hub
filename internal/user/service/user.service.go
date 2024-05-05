@@ -19,7 +19,7 @@ func PullContract(c *gin.Context, ContractId string) {
 	res, err := lumx.FetchContractDetails(ContractId)
 	if err != nil {
 		c.Set("Error", "Error in lumx Api")
-		c.Status(http.StatusInternalServerError)
+		c.Status(http.StatusNotAcceptable)
 		return
 	}
 	c.Set("Response", res)
@@ -30,7 +30,7 @@ func PullAllContract(c *gin.Context) {
 	res, err := lumx.FetchContracts()
 	if err != nil {
 		c.Set("Error", "Error in lumx Api")
-		c.Status(http.StatusInternalServerError)
+		c.Status(http.StatusNotAcceptable)
 		return
 	}
 	c.Set("Response", res)
@@ -60,7 +60,7 @@ func CreateUser(c *gin.Context, user inter.UserController) {
 		wallet, err := lumx.PostLumxWallet()
 		if err != nil {
 			c.Set("Error", "Error in lumx Api")
-			c.Status(http.StatusInternalServerError)
+			c.Status(http.StatusNotAcceptable)
 			return
 		}
 		login, err := storage.CreateLogin(db.Repo, user.Email, true)
@@ -102,7 +102,7 @@ func CreateContract(c *gin.Context, input inter.ContractController) {
 	res, err := lumx.CreateContractLumx(input)
 	if err != nil {
 		c.Set("Error", err)
-		c.Status(http.StatusInternalServerError)
+		c.Status(http.StatusNotAcceptable)
 		return
 	}
 	c.Set("Response", res)
@@ -113,7 +113,7 @@ func DeployContract(c *gin.Context, input inter.DeployController) {
 	res, err := lumx.DeployContract(input.ContractId)
 	if err != nil {
 		c.Set("Error", err)
-		c.Status(http.StatusInternalServerError)
+		c.Status(http.StatusNotAcceptable)
 		return
 	}
 	c.Set("Response", res)

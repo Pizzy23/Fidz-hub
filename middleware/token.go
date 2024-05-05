@@ -58,10 +58,9 @@ func generateTokenHandler(c *gin.Context) {
 // @Tags User
 // @Accept json
 // @Produce json
-// @Param Email header string true  "E-mail from user"
-// @Param Authorization header string true "Token de autenticação (Colocar o token deixando o Bearer)" default(Bearer <token>)
-// @Success 200 {object} inter.UserOutputController "New User Created successfully"
-// @Failure 500 {object} errors.InternalServerError "Unable to store data in database"
+// @Param Email header string true "E-mail from user"
+// @Success 200 {object} string "token make:"
+// @Failure 500 {object} string "User not found in db"
 // @Router /login [put]
 func LoginUser(c *gin.Context) {
 	Email := c.GetHeader("Email")
