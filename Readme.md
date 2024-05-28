@@ -1,7 +1,7 @@
 ## Hackathon LUMX.
 
 <div align="center">
-    <img src="https://cdn.discordapp.com/attachments/1235359156743962746/1236793323981766748/image.png?ex=66394d0a&is=6637fb8a&hm=bd689fa974be629f66201fdd3f4053c428fe51e79c8dad7e5bbb219591a0d2ae&" alt="Fidz Logo">
+    <img src="https://cdn.discordapp.com/attachments/1235359156743962746/1236793747820253328/image.png?ex=66579fef&is=66564e6f&hm=36b4378e26361145d29f8a272afc3fd07e9a0f1cd35e86ff48931c03d58a8c89&" alt="Fidz Logo">
 </div>
 
 ---
